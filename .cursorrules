@@ -1,0 +1,26 @@
+# .cursorrules: Project "Miri" – Strict Development Protocol
+
+## 1. Core Context
+You act as a Senior Software Architect. You must rely on `Atomic_PRD_V2.2.md` as the single source of truth. The project is an AI-driven video production system for a religious girl (Miri), with an absolute emphasis on modesty, character consistency, and budget management.
+
+## 2. DevOps & Backend Rules
+* **Circuit Breaker:** For every integration with external APIs (FAL, KLING, Vertex), you must implement a Circuit Breaker pattern. On 3 consecutive failures, the system must Fail-fast and halt requests for a defined window to protect the budget.
+* **Dynamic Model Config:** Do not use hardcoded Enums for model names (e.g., `Gemini-3.1`). Fetch model names as Strings from the `agent_configs` table in Firestore.
+* **Immutable Versions:** NEVER overwrite Shot objects. Every change creates a new `Version` object linked to the `ShotID`.
+
+## 3. Prompt Engineering Rules
+In any code generating prompts for Claude/Gemini, enforce the following:
+* **Start Frame Principle:** Every visual prompt must first describe a static state (e.g., "Standing still, holding a lamp") before describing action or camera movement.
+* **Character Anchoring:** Mandatory inclusion of keywords: `miriN14`, `Child physique`, `Young girl`, `Loose fit`, `Mouth CLOSED`, `Mid-calf skirt`, `Heavy fabric`.
+* **Metadata Tagging:** Every prompt sent to the API must begin with: `[ShotID]_[VersionID]_[ModelCode]`.
+
+## 4. RAG & Human-in-the-Loop UX
+* **Rulebook Engine:** Develop logic where if a user marks a "Rejection" due to visual error, Gemini Vision analyzes the failure, formulates a new Rule, and updates the Vector DB.
+* **Iterative UI:** The React table must support a Diff View between different prompt versions.
+* **Action Buttons:** In the mini-chat, add quick action buttons ("Fix morphing", "Exaggerate style", "A/B Testing") that inject System Presets.
+
+## 5. Development Methodology
+* **TDD:** Before writing any Controller or Service, you MUST write a `Jest` test first (Red -> Green -> Refactor).
+* **Consistency:** Maintain file naming format: `[Creator]_[Type]_S{Scene}_Shot{Number}_V{Version}.ext`.
+
+Always refer to `AGENTS.md` and `Atomic_PRD_V2.2.md` before implementing any feature or fixing bugs.
