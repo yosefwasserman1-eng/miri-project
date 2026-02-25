@@ -1,3 +1,4 @@
+import { fal } from '@fal-ai/client';
 import type { Shot } from '../schemas';
 
 export interface GenerationRequestPayload {
@@ -8,9 +9,21 @@ export interface GenerationRequestPayload {
 }
 
 export const ModelProvider = {
-  // Stubbed model call; real FAL/Vertex integration will be added later.
-  async requestGeneration(_payload: GenerationRequestPayload): Promise<{ jobId: string }> {
-    return { jobId: 'stub-job' };
+  async requestGeneration(payload: GenerationRequestPayload): Promise<unknown> {
+    const { shot, webhookUrl } = payload;
+
+    const prompt = [
+      'Child physique, Young girl, Loose fit, Heavy fabric, Mid-calf skirt, Mouth CLOSED, miriN14.',
+      'Start frame: calm, neutral pose before any action.',
+      shot.lyricsSnippet
+    ].join(' ');
+
+    return fal.queue.submit('fal-ai/flux-2', {
+      webhookUrl,
+      input: {
+        prompt
+      }
+    });
   }
 };
 
