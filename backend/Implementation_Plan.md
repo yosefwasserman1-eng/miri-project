@@ -24,6 +24,6 @@
 - [ ] 4.3 Write tests simulating WebSocket client receiving status updates.
 
 ## Phase 5: Python Video Renderer (MoviePy)
-- [ ] 5.1 Set up Flask/FastAPI server in `python-renderer`.
-- [ ] 5.2 Create endpoint to receive list of video clips and MP3 file.
-- [ ] 5.3 Implement `moviepy` logic to stitch videos and sync with audio.
+- [x] 5.1 Set up Flask/FastAPI server in `python-renderer`.
+- [x] 5.2 Create endpoint to receive list of video clips and MP3 file.
+- [x] 5.3 Implement `moviepy` logic to stitch videos and sync with audio.
