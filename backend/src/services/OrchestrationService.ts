@@ -10,15 +10,17 @@ export class OrchestrationService {
    * - Resolve immediately without waiting for any external completion
    */
   static async startGenerationFlow(shot: Shot, webhookUrl: string): Promise<void> {
-    await VersionRepository.insertVersion({
-      shotId: shot.shotId,
-      status: 'PENDING'
-    });
-
-    await ModelProvider.requestGeneration({
-      shot,
-      webhookUrl
-    });
+    // Parallelize DB insertion and External API call to reduce total latency.
+    await Promise.all([
+      VersionRepository.insertVersion({
+        shotId: shot.shotId,
+        status: 'PENDING'
+      }),
+      ModelProvider.requestGeneration({
+        shot,
+        webhookUrl
+      })
+    ]);
   }
 }
 
