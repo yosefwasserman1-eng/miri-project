@@ -4,6 +4,7 @@ import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 import Typography from '@mui/material/Typography';
+import { LoadingIndicator } from '../LoadingIndicator';
 
 export function ChatUI() {
     return (
@@ -12,10 +13,10 @@ export function ChatUI() {
                 <Typography variant="h6" className="text-gray-800">QA Conversational Engine</Typography>
             </Box>
             <Box className="flex-1 overflow-y-auto p-4 space-y-4">
-                {/* Mock loading state */}
+                {/* Visual state for pending generation */}
                 <Box className="flex justify-start">
-                    <Box className="bg-gray-100 p-3 rounded-2xl rounded-tr-none">
-                        <Typography variant="body2">System is waiting for your instruction.</Typography>
+                    <Box className="bg-gray-100 p-3 rounded-2xl rounded-tr-none max-w-[80%]">
+                        <LoadingIndicator label="System is waiting for your instruction..." />
                     </Box>
                 </Box>
             </Box>

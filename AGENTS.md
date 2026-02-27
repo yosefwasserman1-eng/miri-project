@@ -20,3 +20,22 @@ For every new feature, follow these exact steps:
 
 ## 5. Diagram Comprehension
 Read the **Mermaid.js** diagrams embedded in the PRD to understand the Webhook flow and Stateless Execution. Do not build synchronous polling loops unless explicitly specified; always rely on Webhook Endpoints.
+
+## 6. Terminal & Execution Constraints (CRITICAL)
+You operate in a strict non-interactive shell environment. You CANNOT respond to standard input prompts (e.g., [y/N], list selections, or watch modes).
+To prevent terminal hangs, you MUST adhere to these rules:
+- **Testing Framework:** Always use the centralized `vitest.setup.ts`. Do not manually configure environments in individual test files unless strictly necessary.
+* **No Watch Modes:** NEVER run testing or build processes in watch mode.
+### 6.1 Windows PowerShell Compatibility
+You are running in a Windows PowerShell environment. You MUST NOT use Linux/Bash inline environment variable syntax (e.g., `VAR=value command`).
+Instead, follow these execution rules:
+- **No Inline Vars:** To run a command with a specific flag, use the command's native flags (e.g., `npx vitest run` instead of `CI=true npx vitest`).
+- **PowerShell Syntax:** If you absolutely must set an environment variable, use the PowerShell format: `$env:VAR="value"; command`.
+- **Pathing:** Use backslashes `\` or ensure your cross-platform tools handle forward slashes `/` correctly.
+* **Auto-Confirm:** ALWAYS append `--yes` or `-y` to `npx`, `npm create`, or package execution commands.
+* **Self-Correction:** If a process hangs or does not exit properly, you must kill it immediately, identify the missing non-interactive flag, and rerun it correctly.
+
+## 7. Workflow & Tracking
+* **Step-by-Step Execution:** Never execute the entire implementation plan at once. Focus only on your specific assigned task.
+* **Artifact Synchronization:** Upon successfully completing a task, you MUST explicitly update the `Frontend_Implementation_Plan.md` (or main plan) by checking the appropriate box `[x]`.
+* **Halt and Await:** After updating the implementation plan, stop immediately and wait for the user's explicit approval `[Y]` before moving to the next task.

@@ -20,7 +20,7 @@ This document outlines the architectural plan for Phase 6: Frontend Development 
   - [x] The root document will utilize `<html dir="rtl" lang="he">`.
   - [x] MUI will be configured with an RTL theme using `stylis-plugin-rtl`.
   - [x] Tailwind's logical properties (e.g., `ms-`, `me-`, `ps-`, `pe-`) will be used uniformly over physical properties (`ml-`, `mr-`) to ensure perfect mirroring.
-- [ ] **Aesthetics:** High-quality, modern UI featuring loading animations for generation phases.
+- [x] **Aesthetics:** High-quality, modern UI featuring loading animations for generation phases.
 
 ## 3. Backend-as-a-Service: Firebase Client SDK
 - [x] **Authentication:** Firebase Auth SDK for managing secure user sessions.
