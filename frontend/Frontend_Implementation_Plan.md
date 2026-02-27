@@ -23,17 +23,17 @@ This document outlines the architectural plan for Phase 6: Frontend Development 
 - [ ] **Aesthetics:** High-quality, modern UI featuring loading animations for generation phases.
 
 ## 3. Backend-as-a-Service: Firebase Client SDK
-- [ ] **Authentication:** Firebase Auth SDK for managing secure user sessions.
-- [ ] **Database (Firestore):** 
-  - [ ] Integrate Firebase Firestore SDK.
-  - [ ] **Immutable Storage Constraint:** The UI will strictly follow the "append-only" rule. We will NEVER use `updateDoc` to modify existing assets or prompt texts. Instead, we will always create and append a new `Version` to the `versions` array.
-- [ ] **Validation:** All incoming and outgoing data interactions will pass through `Zod` schemas (e.g., `ShotSchema`, `ProjectConfigSchema`) before further processing.
+- [x] **Authentication:** Firebase Auth SDK for managing secure user sessions.
+- [x] **Database (Firestore):** 
+  - [x] Integrate Firebase Firestore SDK.
+  - [x] **Immutable Storage Constraint:** The UI will strictly follow the "append-only" rule. We will NEVER use `updateDoc` to modify existing assets or prompt texts. Instead, we will always create and append a new `Version` to the `versions` array.
+- [x] **Validation:** All incoming and outgoing data interactions will pass through `Zod` schemas (e.g., `ShotSchema`, `ProjectConfigSchema`) before further processing.
 
 ## 4. Real-time Communication: Socket.io-Client
-- [ ] **Implementation:**
-  - [ ] Setup `socket.io-client` pointing to the Node.js API.
-  - [ ] Listen for events like `'SHOT_UPDATED'` or generation completions.
-  - [ ] **Constraint:** Replaces any synchronous polling loops with an event-driven flow to ensure status messages are synchronized reactively across the UI.
+- [x] **Implementation:**
+  - [x] Setup `socket.io-client` pointing to the Node.js API.
+  - [x] Listen for events like `'SHOT_UPDATED'` or generation completions.
+  - [x] **Constraint:** Replaces any synchronous polling loops with an event-driven flow to ensure status messages are synchronized reactively across the UI.
 
 ## 5. Component Architecture: "Human-in-the-Loop" Dashboard
 The dashboard is the main operator console, focusing on conversational interactions and immutable history.
