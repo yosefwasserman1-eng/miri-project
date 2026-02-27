@@ -16,10 +16,10 @@
 ## Phase 3: Webhooks & External APIs
 - [x] 3.1 Create `FalWebhookController` via TDD: Handle POST request from FAL AI, update Database status to `IMAGE_READY`.
 - [x] 3.2 Implement actual FAL AI API integration in `OrchestrationService` replacing the stub.
-- [ ] 3.3 Create Video Generation Webhook logic (KLING o3 / FAL Video).
+- [x] 3.3 Create Video Generation Webhook logic (KLING o3 / FAL Video).
 
 ## Phase 4: Real-time Communication (WebSockets & Redis)
-- [ ] 4.1 Set up Socket.io server with Redis Pub/Sub adapter.
+- [x] 4.1 Set up Socket.io server with Redis Pub/Sub adapter.
 - [ ] 4.2 Emit `SHOT_UPDATED` events from the Webhook controllers via Redis.
 - [ ] 4.3 Write tests simulating WebSocket client receiving status updates.
 
