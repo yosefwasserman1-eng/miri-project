@@ -1,13 +1,16 @@
 import type { ShotUpdatedEventPayload } from '../realtime/RedisPublisher';
+import { describe, it, expect, vi } from 'vitest';
 
-const redisPublishMock = jest.fn();
+const redisPublishMock = vi.fn();
 
-const RedisMock = jest.fn().mockImplementation(() => ({
+const RedisMock = vi.fn().mockImplementation(() => ({
   publish: redisPublishMock,
-  disconnect: jest.fn()
+  disconnect: vi.fn()
 }));
 
-jest.mock('ioredis', () => RedisMock, { virtual: true });
+vi.mock('ioredis', () => ({
+  default: RedisMock
+}));
 
 describe('RedisPublisher.publishShotUpdated', () => {
   it('publishes SHOT_UPDATED events to the Redis channel with the correct payload', async () => {

@@ -1,24 +1,23 @@
 import { ShotSchema } from '../schemas';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Mock the Database and ModelProvider modules.
-jest.mock(
+vi.mock(
   '../db/VersionRepository',
   () => ({
     VersionRepository: {
-      insertVersion: jest.fn()
+      insertVersion: vi.fn()
     }
-  }),
-  { virtual: true }
+  })
 );
 
-jest.mock(
+vi.mock(
   '../providers/ModelProvider',
   () => ({
     ModelProvider: {
-      requestGeneration: jest.fn().mockResolvedValue({ jobId: 'job-123' })
+      requestGeneration: vi.fn().mockResolvedValue({ jobId: 'job-123' })
     }
-  }),
-  { virtual: true }
+  })
 );
 
 describe('OrchestrationService.startGenerationFlow', () => {

@@ -1,18 +1,18 @@
 import { ShotSchema } from '../schemas';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 
-const queueSubmitMock = jest.fn().mockResolvedValue({ requestId: 'req-123' });
+const queueSubmitMock = vi.fn().mockResolvedValue({ requestId: 'req-123' });
 
-jest.mock(
+vi.mock(
   '@fal-ai/client',
   () => ({
     fal: {
       queue: {
         submit: queueSubmitMock
       },
-      config: jest.fn()
+      config: vi.fn()
     }
-  }),
-  { virtual: true }
+  })
 );
 
 describe('ModelProvider.requestGeneration', () => {
@@ -40,7 +40,7 @@ describe('ModelProvider.requestGeneration', () => {
 
     expect(fal.queue.submit).toHaveBeenCalledTimes(1);
 
-    const [endpointId, options] = (fal.queue.submit as jest.Mock).mock
+    const [endpointId, options] = (fal.queue.submit as any).mock
       .calls[0] as [string, { webhookUrl: string; input: { prompt: string } }];
 
     expect(endpointId).toBe('fal-ai/flux-2');

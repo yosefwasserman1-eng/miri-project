@@ -1,20 +1,20 @@
 import request from 'supertest';
 import express, { Application } from 'express';
+import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 
-jest.mock('../db/VersionRepository', () => ({
+vi.mock('../db/VersionRepository', () => ({
   VersionRepository: {
-    updateVersionStatus: jest.fn()
+    updateVersionStatus: vi.fn()
   }
 }));
 
-jest.mock(
+vi.mock(
   '../realtime/RedisPublisher',
   () => ({
     RedisPublisher: {
-      publishShotUpdated: jest.fn()
+      publishShotUpdated: vi.fn()
     }
-  }),
-  { virtual: true }
+  })
 );
 
 describe('VideoWebhookController - POST /api/webhooks/video', () => {

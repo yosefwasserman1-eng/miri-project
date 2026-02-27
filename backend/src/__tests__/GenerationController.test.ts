@@ -1,10 +1,11 @@
 import request from 'supertest';
 import express, { Application } from 'express';
 import { ShotSchema } from '../schemas';
+import { describe, it, expect, vi, beforeEach, beforeAll } from 'vitest';
 
-jest.mock('../services/OrchestrationService', () => ({
+vi.mock('../services/OrchestrationService', () => ({
   OrchestrationService: {
-    startGenerationFlow: jest.fn()
+    startGenerationFlow: vi.fn()
   }
 }));
 

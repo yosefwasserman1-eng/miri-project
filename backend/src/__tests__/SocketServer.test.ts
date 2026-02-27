@@ -1,32 +1,34 @@
 import type { Server as HttpServer } from 'http';
+import { describe, it, expect, vi } from 'vitest';
 
-const ioOnMock = jest.fn();
-const ioEmitMock = jest.fn();
+const ioOnMock = vi.fn();
+const ioEmitMock = vi.fn();
 
 const ioInstance = {
   on: ioOnMock,
   emit: ioEmitMock
 };
 
-const SocketIOServerMock = jest.fn().mockReturnValue(ioInstance);
+const SocketIOServerMock = vi.fn().mockReturnValue(ioInstance);
 
-jest.mock(
+vi.mock(
   'socket.io',
   () => ({
     Server: SocketIOServerMock
-  }),
-  { virtual: true }
+  })
 );
 
-const redisSubscribeMock = jest.fn();
-const redisOnMock = jest.fn();
+const redisSubscribeMock = vi.fn();
+const redisOnMock = vi.fn();
 
-const RedisMock = jest.fn().mockImplementation(() => ({
+const RedisMock = vi.fn().mockImplementation(() => ({
   subscribe: redisSubscribeMock,
   on: redisOnMock
 }));
 
-jest.mock('ioredis', () => RedisMock, { virtual: true });
+vi.mock('ioredis', () => ({
+  default: RedisMock
+}));
 
 describe('SocketServer.createSocketServer', () => {
   it('creates a Socket.io server and wires Redis Pub/Sub for SHOT_UPDATED events', () => {

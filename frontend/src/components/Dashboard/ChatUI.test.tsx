@@ -1,6 +1,9 @@
+/** @vitest-environment jsdom */
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
+import * as matchers from '@testing-library/jest-dom/matchers';
+expect.extend(matchers);
 import { ChatUI } from './ChatUI';
 import { RTLProvider } from '../../RTLProvider';
 

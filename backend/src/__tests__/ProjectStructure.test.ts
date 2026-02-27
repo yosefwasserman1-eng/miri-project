@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { describe, it, expect } from 'vitest';
 
 describe('Project folder structure (Implementation Plan 1.1)', () => {
   it('has backend, frontend, and python-renderer directories at the repo root', () => {
