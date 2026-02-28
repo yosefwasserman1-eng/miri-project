@@ -6,7 +6,7 @@ vi.mock(
   '../db/VersionRepository',
   () => ({
     VersionRepository: {
-      insertVersion: vi.fn()
+      insertVersion: vi.fn().mockResolvedValue('version-id-123')
     }
   })
 );
@@ -22,13 +22,9 @@ vi.mock(
 
 describe('OrchestrationService.startGenerationFlow', () => {
   it('persists a PENDING version and calls ModelProvider with webhook URL', async () => {
-    // Load mocked modules
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { VersionRepository } = require('../db/VersionRepository');
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { ModelProvider } = require('../providers/ModelProvider');
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { OrchestrationService } = require('../services/OrchestrationService');
+    const { VersionRepository } = await import('../db/VersionRepository');
+    const { ModelProvider } = await import('../providers/ModelProvider');
+    const { OrchestrationService } = await import('../services/OrchestrationService');
 
     const validShot = ShotSchema.parse({
       shotId: '550e8400-e29b-41d4-a716-446655440010',
@@ -55,7 +51,8 @@ describe('OrchestrationService.startGenerationFlow', () => {
     expect(ModelProvider.requestGeneration).toHaveBeenCalledWith(
       expect.objectContaining({
         shot: validShot,
-        webhookUrl
+        webhookUrl,
+        versionId: 'version-id-123'
       })
     );
   });

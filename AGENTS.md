@@ -36,6 +36,7 @@ Instead, follow these execution rules:
 * **Self-Correction:** If a process hangs or does not exit properly, you must kill it immediately, identify the missing non-interactive flag, and rerun it correctly.
 
 ## 7. Workflow & Tracking
+* **Roadmap Mandate:** Before starting any task, agents MUST read `MASTER_ROADMAP.md` to understand the current phase and explicitly check off the `[x]` box when a task is completed.
 * **Step-by-Step Execution:** Never execute the entire implementation plan at once. Focus only on your specific assigned task.
-* **Artifact Synchronization:** Upon successfully completing a task, you MUST explicitly update the `Frontend_Implementation_Plan.md` (or main plan) by checking the appropriate box `[x]`.
+* **Artifact Synchronization:** Upon successfully completing a task, you MUST explicitly update the `Frontend_Implementation_Plan.md` (or main plan) and/or `MASTER_ROADMAP.md` by checking the appropriate box `[x]`.
 * **Halt and Await:** After updating the implementation plan, stop immediately and wait for the user's explicit approval `[Y]` before moving to the next task.

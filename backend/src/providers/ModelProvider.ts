@@ -4,13 +4,16 @@ import type { Shot } from '../schemas';
 export interface GenerationRequestPayload {
   shot: Shot;
   webhookUrl: string;
-  // Placeholder for any provider-specific options.
+  versionId: string;
   [key: string]: unknown;
 }
 
 export const ModelProvider = {
   async requestGeneration(payload: GenerationRequestPayload): Promise<unknown> {
-    const { shot, webhookUrl } = payload;
+    const { shot, webhookUrl, versionId } = payload;
+
+    const callbackUrl =
+      webhookUrl + (webhookUrl.includes('?') ? '&' : '?') + `versionId=${encodeURIComponent(versionId)}&shotId=${encodeURIComponent(shot.shotId)}`;
 
     const prompt = [
       'Child physique, Young girl, Loose fit, Heavy fabric, Mid-calf skirt, Mouth CLOSED, miriN14.',
@@ -19,7 +22,7 @@ export const ModelProvider = {
     ].join(' ');
 
     return fal.queue.submit('fal-ai/flux-2', {
-      webhookUrl,
+      webhookUrl: callbackUrl,
       input: {
         prompt
       }

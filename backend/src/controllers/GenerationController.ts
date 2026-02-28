@@ -13,7 +13,8 @@ export class GenerationController {
       });
     }
 
-    const webhookUrl = 'https://example.com/api/webhooks/fal';
+    const webhookBase = process.env.WEBHOOK_BASE_URL ?? 'http://localhost:3000';
+    const webhookUrl = `${webhookBase.replace(/\/$/, '')}/api/webhooks/fal`;
 
     OrchestrationService.startGenerationFlow(parseResult.data, webhookUrl);
 

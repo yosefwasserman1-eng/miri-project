@@ -1,80 +1,39 @@
-import { fal } from '@fal-ai/client';
-import { addVersionToShot } from './shotService';
+export const API_BASE = 'http://localhost:3000';
 
 /**
- * Mandatory triggers that must be included in every prompt to ensure character consistency.
+ * All generations are routed through the backend. The frontend must NEVER use
+ * @fal-ai/client directly; FAL_KEY must stay server-side only.
+ *
+ * Payload required by backend ShotSchema for POST /api/shots/generate.
  */
-const MANDATORY_TRIGGERS = [
-    'miriN14',
-    'Mouth CLOSED',
-    'Heavy fabric',
-    'Mid-calf skirt'
-];
-
-/**
- * Constructs the final prompt by adding mandatory triggers.
- */
-function constructPrompt(userPrompt: string): string {
-    const triggers = MANDATORY_TRIGGERS.join(', ');
-    return `${userPrompt}, ${triggers}`;
+interface GenerateShotPayload {
+  shotId: string;
+  sceneId: string;
+  timestamps: { startMs: number; endMs: number };
+  lyricsSnippet: string;
+  status: 'DRAFT' | 'AWAITING_APPROVAL' | 'REFINING' | 'GENERATING_VIDEO' | 'COMPLETED' | 'FAILED';
+  versions: string[];
 }
 
 /**
- * Generates an image using FAL AI (Flux-2-Turbo) and saves it as a new Version.
+ * Requests image generation by POSTing the user's prompt to the backend.
+ * Backend orchestrates FAL with webhook; no direct FAL calls from the client.
  */
-export async function generateImage(userPrompt: string, shotId: string) {
-    const finalPrompt = constructPrompt(userPrompt);
+export async function requestImageGeneration(userPrompt: string): Promise<Response> {
+  const payload: GenerateShotPayload = {
+    shotId: crypto.randomUUID(),
+    sceneId: crypto.randomUUID(),
+    timestamps: { startMs: 0, endMs: 5000 },
+    lyricsSnippet: userPrompt,
+    status: 'DRAFT',
+    versions: []
+  };
 
-    const result = await fal.subscribe('fal-ai/flux/turbo', {
-        input: {
-            prompt: finalPrompt
-        },
-        logs: true,
-    });
+  const response = await fetch(`${API_BASE}/api/shots/generate`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
 
-    const imageUrl = (result as any).data.images[0].url;
-
-    // Save via shotService (Immutable Storage Constraint)
-    return await addVersionToShot(shotId, {
-        shotId,
-        prompt: {
-            scene: userPrompt, // The raw prompt used as reference
-            subjects: [], // Optional: could be parsed if needed
-            style: 'Realistic',
-            lighting: 'Natural',
-            camera: 'Wide'
-        },
-        imageUrl,
-        status: 'IMAGE_READY'
-    });
-}
-
-/**
- * Generates a video using FAL AI (Kling-o3) and saves it as a new Version.
- */
-export async function generateVideo(userPrompt: string, shotId: string) {
-    const finalPrompt = constructPrompt(userPrompt);
-
-    const result = await fal.subscribe('fal-ai/kling-video/v1.5/pro/text-to-video', {
-        input: {
-            prompt: finalPrompt
-        },
-        logs: true,
-    });
-
-    const videoUrl = (result as any).data.video.url;
-
-    // Save via shotService (Immutable Storage Constraint)
-    return await addVersionToShot(shotId, {
-        shotId,
-        prompt: {
-            scene: userPrompt,
-            subjects: [],
-            style: 'Cinematic',
-            lighting: 'Natural',
-            camera: 'Handheld'
-        },
-        videoUrl,
-        status: 'VIDEO_READY'
-    });
+  return response;
 }

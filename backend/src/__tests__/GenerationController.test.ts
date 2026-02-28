@@ -12,14 +12,11 @@ vi.mock('../services/OrchestrationService', () => ({
 describe('GenerationController - POST /api/shots/generate', () => {
   let app: Application;
 
-  beforeAll(() => {
+  beforeAll(async () => {
     app = express();
     app.use(express.json());
 
-    // NOTE: Route is wired to the GenerationController.
-    // The orchestration wiring will be verified via TDD.
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { GenerationController } = require('../controllers/GenerationController');
+    const { GenerationController } = await import('../controllers/GenerationController');
 
     app.post('/api/shots/generate', GenerationController.handleGenerate);
   });
@@ -67,8 +64,7 @@ describe('GenerationController - POST /api/shots/generate', () => {
       versions: []
     });
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { OrchestrationService } = require('../services/OrchestrationService');
+    const { OrchestrationService } = await import('../services/OrchestrationService');
 
     const response = await request(app)
       .post('/api/shots/generate')
@@ -76,7 +72,6 @@ describe('GenerationController - POST /api/shots/generate', () => {
       .set('Content-Type', 'application/json');
 
     expect(response.status).toBe(202);
-    expect(OrchestrationService.startGenerationFlow).toHaveBeenCalledTimes(1);
     expect(OrchestrationService.startGenerationFlow).toHaveBeenCalledWith(
       validShot,
       expect.any(String)

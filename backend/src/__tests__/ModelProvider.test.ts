@@ -17,10 +17,8 @@ vi.mock(
 
 describe('ModelProvider.requestGeneration', () => {
   it('submits a flux-2 generation with required prompt constraints and webhook URL', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { fal } = require('@fal-ai/client');
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { ModelProvider } = require('../providers/ModelProvider');
+    const { fal } = await import('@fal-ai/client');
+    const { ModelProvider } = await import('../providers/ModelProvider');
 
     const shot = ShotSchema.parse({
       shotId: '550e8400-e29b-41d4-a716-446655440300',
@@ -32,10 +30,12 @@ describe('ModelProvider.requestGeneration', () => {
     });
 
     const webhookUrl = 'https://example.com/api/webhooks/fal';
+    const versionId = 'version-456';
 
     await ModelProvider.requestGeneration({
       shot,
-      webhookUrl
+      webhookUrl,
+      versionId
     });
 
     expect(fal.queue.submit).toHaveBeenCalledTimes(1);
@@ -44,7 +44,9 @@ describe('ModelProvider.requestGeneration', () => {
       .calls[0] as [string, { webhookUrl: string; input: { prompt: string } }];
 
     expect(endpointId).toBe('fal-ai/flux-2');
-    expect(options.webhookUrl).toBe(webhookUrl);
+    expect(options.webhookUrl).toContain(webhookUrl);
+    expect(options.webhookUrl).toContain('versionId=version-456');
+    expect(options.webhookUrl).toContain('shotId=550e8400-e29b-41d4-a716-446655440300');
 
     const { prompt } = options.input;
 

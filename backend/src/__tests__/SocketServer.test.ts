@@ -9,7 +9,9 @@ const ioInstance = {
   emit: ioEmitMock
 };
 
-const SocketIOServerMock = vi.fn().mockReturnValue(ioInstance);
+const SocketIOServerMock = vi.fn(function (this: unknown) {
+  return ioInstance;
+});
 
 vi.mock(
   'socket.io',
@@ -21,19 +23,17 @@ vi.mock(
 const redisSubscribeMock = vi.fn();
 const redisOnMock = vi.fn();
 
-const RedisMock = vi.fn().mockImplementation(() => ({
-  subscribe: redisSubscribeMock,
-  on: redisOnMock
-}));
+const RedisMock = vi.fn(function (this: unknown) {
+  return { subscribe: redisSubscribeMock, on: redisOnMock };
+});
 
 vi.mock('ioredis', () => ({
   default: RedisMock
 }));
 
 describe('SocketServer.createSocketServer', () => {
-  it('creates a Socket.io server and wires Redis Pub/Sub for SHOT_UPDATED events', () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { createSocketServer } = require('../realtime/SocketServer');
+  it('creates a Socket.io server and wires Redis Pub/Sub for SHOT_UPDATED events', async () => {
+    const { createSocketServer } = await import('../realtime/SocketServer');
 
     const httpServer = {} as HttpServer;
     const redisUrl = 'redis://localhost:6379';

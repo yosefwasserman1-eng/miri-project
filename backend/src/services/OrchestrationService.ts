@@ -10,14 +10,15 @@ export class OrchestrationService {
    * - Resolve immediately without waiting for any external completion
    */
   static async startGenerationFlow(shot: Shot, webhookUrl: string): Promise<void> {
-    await VersionRepository.insertVersion({
+    const versionId = await VersionRepository.insertVersion({
       shotId: shot.shotId,
       status: 'PENDING'
     });
 
     await ModelProvider.requestGeneration({
       shot,
-      webhookUrl
+      webhookUrl,
+      versionId
     });
   }
 }

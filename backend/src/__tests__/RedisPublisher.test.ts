@@ -3,10 +3,9 @@ import { describe, it, expect, vi } from 'vitest';
 
 const redisPublishMock = vi.fn();
 
-const RedisMock = vi.fn().mockImplementation(() => ({
-  publish: redisPublishMock,
-  disconnect: vi.fn()
-}));
+const RedisMock = vi.fn(function (this: unknown) {
+  return { publish: redisPublishMock, disconnect: vi.fn() };
+});
 
 vi.mock('ioredis', () => ({
   default: RedisMock
@@ -14,8 +13,7 @@ vi.mock('ioredis', () => ({
 
 describe('RedisPublisher.publishShotUpdated', () => {
   it('publishes SHOT_UPDATED events to the Redis channel with the correct payload', async () => {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { RedisPublisher } = require('../realtime/RedisPublisher');
+    const { RedisPublisher } = await import('../realtime/RedisPublisher');
 
     const payload: ShotUpdatedEventPayload = {
       event: 'SHOT_UPDATED',

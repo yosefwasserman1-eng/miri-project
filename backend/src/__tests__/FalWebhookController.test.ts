@@ -20,12 +20,11 @@ vi.mock(
 describe('FalWebhookController - POST /api/webhooks/fal', () => {
   let app: Application;
 
-  beforeAll(() => {
+  beforeAll(async () => {
     app = express();
     app.use(express.json());
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { FalWebhookController } = require('../controllers/FalWebhookController');
+    const { FalWebhookController } = await import('../controllers/FalWebhookController');
 
     app.post('/api/webhooks/fal', FalWebhookController.handleFalWebhook);
   });
@@ -37,10 +36,8 @@ describe('FalWebhookController - POST /api/webhooks/fal', () => {
       imageUrl: 'https://example.com/image.png'
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { VersionRepository } = require('../db/VersionRepository');
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { RedisPublisher } = require('../realtime/RedisPublisher');
+    const { VersionRepository } = await import('../db/VersionRepository');
+    const { RedisPublisher } = await import('../realtime/RedisPublisher');
 
     const response = await request(app)
       .post('/api/webhooks/fal')

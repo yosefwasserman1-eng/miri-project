@@ -20,12 +20,11 @@ vi.mock(
 describe('VideoWebhookController - POST /api/webhooks/video', () => {
   let app: Application;
 
-  beforeAll(() => {
+  beforeAll(async () => {
     app = express();
     app.use(express.json());
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { VideoWebhookController } = require('../controllers/VideoWebhookController');
+    const { VideoWebhookController } = await import('../controllers/VideoWebhookController');
 
     app.post('/api/webhooks/video', VideoWebhookController.handleVideoWebhook);
   });
@@ -37,10 +36,8 @@ describe('VideoWebhookController - POST /api/webhooks/video', () => {
       videoUrl: 'https://example.com/video.mp4'
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { VersionRepository } = require('../db/VersionRepository');
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { RedisPublisher } = require('../realtime/RedisPublisher');
+    const { VersionRepository } = await import('../db/VersionRepository');
+    const { RedisPublisher } = await import('../realtime/RedisPublisher');
 
     const response = await request(app)
       .post('/api/webhooks/video')

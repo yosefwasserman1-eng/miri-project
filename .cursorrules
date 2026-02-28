@@ -23,4 +23,4 @@ In any code generating prompts for Claude/Gemini, enforce the following:
 * **TDD:** Before writing any Controller or Service, you MUST write a `Jest` test first (Red -> Green -> Refactor).
 * **Consistency:** Maintain file naming format: `[Creator]_[Type]_S{Scene}_Shot{Number}_V{Version}.ext`.
 
-Always refer to `AGENTS.md` and `Atomic_PRD_V2.2.md` before implementing any feature or fixing bugs.
+You MUST always read, reference, and strictly follow the instructions defined in `AGENTS.md` and `MASTER_ROADMAP.md` for every task. Always refer to `AGENTS.md`, `MASTER_ROADMAP.md`, and `Atomic_PRD_V2.2.md` before implementing any feature or fixing bugs.
